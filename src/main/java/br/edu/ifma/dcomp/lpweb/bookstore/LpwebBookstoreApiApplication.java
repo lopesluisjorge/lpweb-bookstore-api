@@ -1,13 +1,13 @@
-package br.edu.ifma.dcomp.lpweb.livraria;
+package br.edu.ifma.dcomp.lpweb.bookstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LpwebLivrariaApiApplication {
+public class LpwebBookstoreApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LpwebLivrariaApiApplication.class, args);
+		SpringApplication.run(LpwebBookstoreApiApplication.class, args);
 	}
 
 }
