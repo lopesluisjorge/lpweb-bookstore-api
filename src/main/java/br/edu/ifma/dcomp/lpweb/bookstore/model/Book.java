@@ -18,7 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "book", uniqueConstraints = { @UniqueConstraint(columnNames = "isbn") })
+@Table(name = "book", 
+       uniqueConstraints = { @UniqueConstraint(columnNames = "isbn") })
 public class Book {
 
     @Id
