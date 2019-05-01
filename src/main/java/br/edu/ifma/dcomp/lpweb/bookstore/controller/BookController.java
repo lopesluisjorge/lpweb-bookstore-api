@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifma.dcomp.lpweb.bookstore.model.Book;
 import br.edu.ifma.dcomp.lpweb.bookstore.service.BookService;
@@ -35,9 +37,16 @@ public class BookController {
     }
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public Book create(@RequestBody Book book) {
-        return bookService.save(book);
+    public ResponseEntity<Book> create(@RequestBody Book book) {
+        var savedBook = bookService.save(book);
+
+        var locationUri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(book.getId())
+                .toUri();
+
+        return ResponseEntity.created(locationUri).body(savedBook);
     }
 
     @PutMapping("/{id}")
