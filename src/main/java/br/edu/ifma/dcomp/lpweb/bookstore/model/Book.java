@@ -24,9 +24,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_seq")
-    @SequenceGenerator(name = "book_id_seq",
-                       sequenceName = "book_id_seq",
-                       allocationSize = 1)
+    @SequenceGenerator(name = "book_id_seq", sequenceName = "book_id_seq", allocationSize = 1)
     private Long id;
 
     private String isbn;
@@ -46,7 +44,7 @@ public class Book {
 
     @ManyToMany
     @JoinTable(name = "book_tag",
-               joinColumns = @JoinColumn(name = "book_id"), 
+               joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private final List<Tag> tags = new ArrayList<>();
 

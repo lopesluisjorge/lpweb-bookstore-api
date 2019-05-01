@@ -1,0 +1,4 @@
+ALTER TABLE book_tag ALTER COLUMN book_id DROP UNIQUE;
+ALTER TABLE book_tag ALTER COLUMN tag_id DROP UNIQUE;
+
+ALTER TABLE book_tag ADD PRIMARY KEY (book_id, tag_id);
