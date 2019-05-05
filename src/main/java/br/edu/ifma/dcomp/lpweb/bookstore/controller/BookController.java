@@ -69,7 +69,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     public BookDto update(@PathVariable Long id, @RequestBody BookDto bookDto, Book injectedBook) {
-        BeanUtils.copyProperties(bookDto, injectedBook, "id");
+        BeanUtils.copyProperties(bookDto, injectedBook);
         var updatedBook = bookService.updateBy(id, injectedBook);
         BeanUtils.copyProperties(updatedBook, bookDto);
 
