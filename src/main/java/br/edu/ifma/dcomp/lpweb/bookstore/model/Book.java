@@ -1,5 +1,6 @@
 package br.edu.ifma.dcomp.lpweb.bookstore.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +57,10 @@ public class Book {
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private final List<Tag> tags = new ArrayList<>();
+
+    private BigDecimal price;
+
+    private Integer stock;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -135,6 +140,22 @@ public class Book {
 
     public void add(Tag... tags) {
         this.tags.addAll(Arrays.asList(tags));
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Integer addToStock(int quantity) {
+        return stock += quantity;
+    }
+
+    public void removeFromStock() {
+        stock--;
     }
 
     public LocalDateTime getCreatedAt() {

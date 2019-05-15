@@ -1,0 +1,2 @@
+ALTER TABLE book ADD COLUMN price NUMERIC(10, 2) CHECK (price > 0);
+ALTER TABLE book ADD COLUMN stock INT DEFAULT(1) CHECK (stock >= 0);
