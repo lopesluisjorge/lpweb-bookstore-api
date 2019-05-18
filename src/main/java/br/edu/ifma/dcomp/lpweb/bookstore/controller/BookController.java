@@ -3,7 +3,6 @@ package br.edu.ifma.dcomp.lpweb.bookstore.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifma.dcomp.lpweb.bookstore.controller.dto.BookDto;
-import br.edu.ifma.dcomp.lpweb.bookstore.model.Book;
 import br.edu.ifma.dcomp.lpweb.bookstore.service.BookService;
 
 @RestController
@@ -33,32 +31,25 @@ public class BookController {
     public List<BookDto> getAll() {
         final var books = bookService.findAll();
 
-        return books
-            .stream()
-            .map(book -> {
-                        BookDto bookDto = new BookDto();
-                        BeanUtils.copyProperties(book, bookDto);
-                        return bookDto;
-                    })
+        return books.stream()
+            .map(book -> BookDto.createFrom(book))
             .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
-        var book = bookService.findBy(id);
-        BookDto bookDto = new BookDto();
-        BeanUtils.copyProperties(book, bookDto);
+        final var book = bookService.findBy(id);
 
-        return bookDto;
+        return BookDto.createFrom(book);
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> create(@RequestBody BookDto bookDto, Book injectedBook) {
-        BeanUtils.copyProperties(bookDto, injectedBook, "id");
-        var savedBook = bookService.save(injectedBook);
-        BeanUtils.copyProperties(savedBook, bookDto);
+    public ResponseEntity<BookDto> create(@RequestBody BookDto bookDto) {
+        final var book = bookDto.getBook();
+        final var savedBook = bookService.save(book);
+        bookDto = BookDto.createFrom(book);
         
-        var locationUri = ServletUriComponentsBuilder
+        final var locationUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(savedBook.getId())
@@ -68,12 +59,11 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDto update(@PathVariable Long id, @RequestBody BookDto bookDto, Book injectedBook) {
-        BeanUtils.copyProperties(bookDto, injectedBook);
-        var updatedBook = bookService.updateBy(id, injectedBook);
-        BeanUtils.copyProperties(updatedBook, bookDto);
+    public BookDto update(@PathVariable Long id, @RequestBody BookDto bookDto) {
+        final var book = bookDto.getBook();
+        final var updatedBook = bookService.updateBy(id, book);
 
-        return bookDto;
+        return BookDto.createFrom(updatedBook);
     }
 
     @DeleteMapping("/{id}")
