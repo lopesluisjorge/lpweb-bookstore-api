@@ -32,8 +32,8 @@ public class BookController {
         final var books = bookService.findAll();
 
         return books.stream()
-            .map(book -> BookDto.createFrom(book))
-            .collect(Collectors.toList());
+                .map(book -> BookDto.createFrom(book))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -60,8 +60,9 @@ public class BookController {
 
     @PutMapping("/{id}")
     public BookDto update(@PathVariable Long id, @RequestBody BookDto bookDto) {
-        final var book = bookDto.getBook();
-        final var updatedBook = bookService.updateBy(id, book);
+        final var book = bookService.findBy(id);
+        final var toUpdate = bookDto.bookIgnoringNullAttributesInDto(book);
+        final var updatedBook = bookService.update(id, toUpdate);
 
         return BookDto.createFrom(updatedBook);
     }

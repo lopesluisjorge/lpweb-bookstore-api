@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifma.dcomp.lpweb.bookstore.model.Book;
 import br.edu.ifma.dcomp.lpweb.bookstore.repository.BookRepository;
-import br.edu.ifma.dcomp.lpweb.bookstore.utils.ObjectAtributes;;
 
 @Service
 public class BookService {
@@ -37,9 +36,9 @@ public class BookService {
     }
 
     @Transactional
-    public Book updateBy(Long id, Book book) {
+    public Book update(Long id, Book book) {
         final var onDatabaseBook = findBy(id);
-        BeanUtils.copyProperties(book, onDatabaseBook, ObjectAtributes.getNullAttributesOf(book));
+        BeanUtils.copyProperties(book, onDatabaseBook, "id");
 
         return onDatabaseBook;
     }
