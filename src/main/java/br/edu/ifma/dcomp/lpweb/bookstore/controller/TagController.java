@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifma.dcomp.lpweb.bookstore.controller.response.ResponseMessage;
 import br.edu.ifma.dcomp.lpweb.bookstore.model.Tag;
 import br.edu.ifma.dcomp.lpweb.bookstore.service.TagService;
 
@@ -18,8 +19,13 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping
-    public List<Tag> getAll() {
-        return tagService.findAll();
+    public ResponseMessage<List<Tag>> getAll() {
+        var tags = tagService.findAll();
+
+        final ResponseMessage<List<Tag>> response = new ResponseMessage<>();
+        response.setContent(tags);
+
+        return response;
     }
 
 }

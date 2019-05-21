@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifma.dcomp.lpweb.bookstore.controller.dto.BookDto;
+import br.edu.ifma.dcomp.lpweb.bookstore.controller.response.ResponseMessage;
 import br.edu.ifma.dcomp.lpweb.bookstore.service.BookService;
 
 @RestController
@@ -28,43 +29,57 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<BookDto> getAll() {
+    public ResponseMessage<List<BookDto>> getAll() {
         final var books = bookService.findAll();
 
-        return books.stream()
+        final var content = books.stream()
                 .map(book -> BookDto.createFrom(book))
                 .collect(Collectors.toList());
+
+        final ResponseMessage<List<BookDto>> response = new ResponseMessage<>();
+        response.setContent(content);
+
+        return response;
     }
 
     @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable Long id) {
+    public ResponseMessage<BookDto> getBookById(@PathVariable Long id) {
         final var book = bookService.findBy(id);
 
-        return BookDto.createFrom(book);
+        final ResponseMessage<BookDto> response = new ResponseMessage<>();
+        response.setContent(BookDto.createFrom(book));
+
+        return response;
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> create(@RequestBody BookDto bookDto) {
+    public ResponseEntity<ResponseMessage<BookDto>> create(@RequestBody BookDto bookDto) {
         final var book = bookDto.getBook();
         final var savedBook = bookService.save(book);
         bookDto = BookDto.createFrom(book);
-        
+
         final var locationUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(savedBook.getId())
                 .toUri();
 
-        return ResponseEntity.created(locationUri).body(bookDto);
+        final ResponseMessage<BookDto> response = new ResponseMessage<>();
+        response.setContent(BookDto.createFrom(book));
+
+        return ResponseEntity.created(locationUri).body(response);
     }
 
     @PutMapping("/{id}")
-    public BookDto update(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public ResponseMessage<BookDto> update(@PathVariable Long id, @RequestBody BookDto bookDto) {
         final var book = bookService.findBy(id);
         final var toUpdate = bookDto.bookIgnoringNullAttributesInDto(book);
         final var updatedBook = bookService.update(id, toUpdate);
 
-        return BookDto.createFrom(updatedBook);
+        final ResponseMessage<BookDto> response = new ResponseMessage<>();
+        response.setContent(BookDto.createFrom(updatedBook));
+
+        return response;
     }
 
     @DeleteMapping("/{id}")
