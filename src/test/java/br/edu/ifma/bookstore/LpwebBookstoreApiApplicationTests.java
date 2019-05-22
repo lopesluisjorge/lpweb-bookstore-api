@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore;
+package br.edu.ifma.bookstore;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

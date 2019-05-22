@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.model;
+package br.edu.ifma.bookstore.model;
 
 import org.hibernate.validator.constraints.br.CPF;
 

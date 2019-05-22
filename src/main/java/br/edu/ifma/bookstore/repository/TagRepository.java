@@ -1,7 +1,7 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.repository;
+package br.edu.ifma.bookstore.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.edu.ifma.dcomp.lpweb.bookstore.model.Tag;
+import br.edu.ifma.bookstore.model.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Integer> { }

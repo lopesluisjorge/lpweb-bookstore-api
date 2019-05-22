@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore;
+package br.edu.ifma.bookstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

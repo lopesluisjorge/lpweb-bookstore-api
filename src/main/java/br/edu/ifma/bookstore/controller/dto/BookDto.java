@@ -1,11 +1,11 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.controller.dto;
+package br.edu.ifma.bookstore.controller.dto;
 
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.edu.ifma.dcomp.lpweb.bookstore.model.Book;
-import br.edu.ifma.dcomp.lpweb.bookstore.utils.ObjectAtributes;
+import br.edu.ifma.bookstore.model.Book;
+import br.edu.ifma.bookstore.utils.ObjectAtributes;
 
 public final class BookDto {
 

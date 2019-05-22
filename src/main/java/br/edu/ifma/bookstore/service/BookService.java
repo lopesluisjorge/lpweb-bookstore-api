@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.service;
+package br.edu.ifma.bookstore.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.ifma.dcomp.lpweb.bookstore.model.Book;
-import br.edu.ifma.dcomp.lpweb.bookstore.repository.BookRepository;
+import br.edu.ifma.bookstore.model.Book;
+import br.edu.ifma.bookstore.repository.BookRepository;
 
 @Service
 public class BookService {

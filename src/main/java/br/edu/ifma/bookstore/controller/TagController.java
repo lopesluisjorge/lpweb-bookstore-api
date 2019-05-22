@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.controller;
+package br.edu.ifma.bookstore.controller;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifma.dcomp.lpweb.bookstore.controller.response.ResponseMessage;
-import br.edu.ifma.dcomp.lpweb.bookstore.model.Tag;
-import br.edu.ifma.dcomp.lpweb.bookstore.service.TagService;
+import br.edu.ifma.bookstore.controller.response.ResponseMessage;
+import br.edu.ifma.bookstore.model.Tag;
+import br.edu.ifma.bookstore.service.TagService;
 
 @RestController
 @RequestMapping("/tags")

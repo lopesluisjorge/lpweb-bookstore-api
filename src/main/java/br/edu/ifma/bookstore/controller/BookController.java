@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.controller;
+package br.edu.ifma.bookstore.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.edu.ifma.dcomp.lpweb.bookstore.controller.dto.BookDto;
-import br.edu.ifma.dcomp.lpweb.bookstore.controller.response.ResponseMessage;
-import br.edu.ifma.dcomp.lpweb.bookstore.service.BookService;
+import br.edu.ifma.bookstore.controller.dto.BookDto;
+import br.edu.ifma.bookstore.controller.response.ResponseMessage;
+import br.edu.ifma.bookstore.service.BookService;
 
 @RestController
 @RequestMapping("/books")

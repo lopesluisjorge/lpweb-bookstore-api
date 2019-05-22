@@ -1,4 +1,4 @@
-package br.edu.ifma.dcomp.lpweb.bookstore.utils;
+package br.edu.ifma.bookstore.utils;
 
 import java.beans.FeatureDescriptor;
 import java.util.stream.Stream;

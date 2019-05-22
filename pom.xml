@@ -8,8 +8,8 @@
         <version>2.1.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>br.edu.ifma.dcomp.lpweb</groupId>
-    <artifactId>bookstore-api</artifactId>
+    <groupId>br.edu.ifma</groupId>
+    <artifactId>bookstore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>lpweb-bookstore-api</name>
     <description>API With Spring Boot</description>
