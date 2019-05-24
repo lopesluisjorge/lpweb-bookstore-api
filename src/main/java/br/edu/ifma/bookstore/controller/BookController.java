@@ -3,6 +3,8 @@ package br.edu.ifma.bookstore.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +55,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage<BookDto>> create(@RequestBody BookDto bookDto) {
+    public ResponseEntity<ResponseMessage<BookDto>> create(@Valid @RequestBody BookDto bookDto) {
         final var book = bookDto.getBook();
         final var savedBook = bookService.save(book);
         bookDto = BookDto.createFrom(book);

@@ -1,29 +1,53 @@
 package br.edu.ifma.bookstore.controller.dto;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.edu.ifma.bookstore.model.Book;
+import br.edu.ifma.bookstore.model.Tag;
 import br.edu.ifma.bookstore.utils.ObjectAtributes;
 
 public final class BookDto {
 
     private Long id;
 
+    @NotNull
+    @ISBN
     private String isbn;
 
+    @NotNull
+    @Size(min = 5)
     private String title;
 
+    @NotEmpty
     private String publishingCompany;
 
+    @NotEmpty
     private String author;
 
     private Integer releaseYear;
 
     private String subject;
 
-    private BookDto() {}
+    private List<@NotEmpty Tag> tags = new ArrayList<>();
+
+    @NotNull
+    @Positive
+    private BigDecimal price;
+
+    private BookDto() {
+    }
 
     public static BookDto createFrom(Book book) {
         BookDto dto = new BookDto();
@@ -97,6 +121,22 @@ public final class BookDto {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+    
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
 }

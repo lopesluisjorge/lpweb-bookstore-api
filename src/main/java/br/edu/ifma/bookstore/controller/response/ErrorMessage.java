@@ -6,6 +6,11 @@ public class ErrorMessage {
 
     private String details;
 
+    public ErrorMessage(String message, String details) {
+        this.message = message;
+        this.details = details;
+    }
+
     public String getMessage() {
         return message;
     }

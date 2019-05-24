@@ -80,7 +80,7 @@ public class Book {
     private BigDecimal price;
 
     @PositiveOrZero
-    private Integer stock;
+    private Integer stock = 0;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
