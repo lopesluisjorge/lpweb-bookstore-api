@@ -7,7 +7,7 @@ import java.util.Set;
 public class ResponseMessage<T> {
 
     private T content;
-    private final Set<Error> errors = new HashSet<>();
+    private final Set<ErrorMessage> errors = new HashSet<>();
 
     public T getContent() {
         return content;
@@ -17,11 +17,11 @@ public class ResponseMessage<T> {
         this.content = content;
     }
 
-    public Set<Error> getErrors() {
+    public Set<ErrorMessage> getErrors() {
         return errors;
     }
 
-    public void add(Error... errors) {
+    public void add(ErrorMessage... errors) {
         this.errors.addAll(Arrays.asList(errors));
     }
 
