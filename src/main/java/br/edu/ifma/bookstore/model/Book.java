@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,19 +17,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.validator.constraints.ISBN;
 
 @Entity
-@Table(name = "book", 
-       uniqueConstraints = { @UniqueConstraint(columnNames = "isbn") })
+@Table(name = "book")
 @SQLDelete(sql = "UPDATE book SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "deleted_at IS NULL")
 public class Book {
@@ -37,13 +44,20 @@ public class Book {
     @SequenceGenerator(name = "book_id_seq", sequenceName = "book_id_seq", allocationSize = 1)
     private Long id;
 
+    @NotNull
+    @ISBN
+    @Column(unique = true)
     private String isbn;
 
+    @NotNull
+    @Size(min = 5)
     private String title;
 
+    @NotEmpty
     @Column(name = "publishing_company")
     private String publishingCompany;
 
+    @NotEmpty
     private String author;
 
     @Column(name = "release_year")
@@ -56,10 +70,16 @@ public class Book {
     @JoinTable(name = "book_tag",
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private final List<Tag> tags = new ArrayList<>();
+    private final List<@NotEmpty Tag> tags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "book")
+    private final Set<Item> items = new LinkedHashSet<>();
+
+    @NotNull
+    @Positive
     private BigDecimal price;
 
+    @PositiveOrZero
     private Integer stock;
 
     @Column(name = "created_at")
@@ -74,7 +94,6 @@ public class Book {
     @PrePersist
     public void beforeInsert() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate

@@ -3,21 +3,28 @@ package br.edu.ifma.bookstore.model;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
+@Entity
+@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -31,10 +38,12 @@ public class Customer {
     @Column(unique = true)
     private String cpf;
 
+    @NotNull
+    @Past
+    @Column(nullable = false)
     private LocalDate birthdate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @OneToOne(mappedBy = "customer")
     private Address address;
 
     private String email;
@@ -43,7 +52,10 @@ public class Customer {
     @CollectionTable(name = "phones",
                      joinColumns = @JoinColumn(name = "customer_id"))
     @Column(name = "phone")
-    private List<@NotEmpty String> phones = new ArrayList<>();
+    private final Set<@NotEmpty String> phones = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private final Set<Rental> rentals = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
@@ -89,12 +101,20 @@ public class Customer {
         this.email = email;
     }
 
-    public List<String> getPhones() {
+    public Set<String> getPhones() {
         return phones;
     }
 
     public void addPhone(String phone) {
         this.phones.add(phone);
+    }
+    
+    public Set<Rental> getRentals() {
+        return rentals;
+    }
+    
+    public void add(Rental... rentals) {
+        this.rentals.addAll(Arrays.asList(rentals));
     }
 
     @Override
