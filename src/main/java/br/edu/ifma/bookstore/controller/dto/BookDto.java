@@ -40,7 +40,7 @@ public final class BookDto {
 
     private String subject;
 
-    private List<@NotEmpty Tag> tags = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
 
     @NotNull
     @Positive

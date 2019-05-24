@@ -6,6 +6,11 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,16 +36,22 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Value("${page.length}")
+    private Integer pageLength;
+
     @GetMapping
-    public ResponseMessage<List<BookDto>> getAll() {
-        final var books = bookService.findAll();
+    public ResponseMessage<Page<BookDto>> queryPaginated(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "3") Integer size,
+            @RequestParam(defaultValue = "title") String orderBy,
+            @RequestParam(defaultValue = "ASC") String direction) {
+        final var pageReq = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
 
-        final var content = books.stream()
-                .map(book -> BookDto.createFrom(book))
-                .collect(Collectors.toList());
+        final var paginatedBooks = bookService.paginate(pageReq);
+        final Page<BookDto> paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
-        final ResponseMessage<List<BookDto>> response = new ResponseMessage<>();
-        response.setContent(content);
+        final ResponseMessage<Page<BookDto>> response = new ResponseMessage<>();
+        response.setContent(paginatedBookDtos);
 
         return response;
     }
