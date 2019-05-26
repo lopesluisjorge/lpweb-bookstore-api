@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,7 +29,7 @@ public class Rental {
     @SequenceGenerator(name = "rental_id_seq", sequenceName = "rental_id_seq", allocationSize = 1)
     private Long id;
 
-    private BigDecimal totalPrice;
+    private BigDecimal subtotal;
 
     private LocalDate rentalDate;
 
@@ -45,13 +46,12 @@ public class Rental {
     @JsonIgnore
     private LocalDateTime updatedAt;
 
+    @PrePersist
     public void beforePersist() {
-        var totalPrice = BigDecimal.ZERO;
-        itemRentals.forEach(itemRental -> totalPrice.add(itemRental.getPrice()));
-        this.totalPrice = totalPrice;
+        this.subtotal = calculeSubtotal();
         this.createdAt = LocalDateTime.now();
     }
-    
+
     public void beforeUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
@@ -64,8 +64,11 @@ public class Rental {
         this.id = id;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getSubtotal() {
+        if (subtotal == null) {
+            return calculeSubtotal();
+        }
+        return subtotal;
     }
 
     public LocalDate getRentalDate() {
@@ -98,6 +101,37 @@ public class Rental {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    private BigDecimal calculeSubtotal() {
+        return itemRentals.stream()
+                .map(itemRental -> itemRental.getPrice())
+                .reduce(BigDecimal.ZERO, (sum, price) -> sum.add(price));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Rental other = (Rental) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 
 }
