@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -28,6 +29,17 @@ public class ItemRental {
 
     private LocalDate returnDate;
 
+    @Deprecated
+    public ItemRental() {
+    }
+
+    public ItemRental(ItemRentalPk itemRentalPk) {
+        this.id = itemRentalPk;
+        var itemPrice = id.getItem().getPrice();
+        this.rentalPrice = itemPrice.subtract(itemPrice.multiply(this.discount));
+    }
+
+    @PrePersist
     public void beforePersist() {
         var itemPrice = id.getItem().getPrice();
         this.rentalPrice = itemPrice.subtract(itemPrice.multiply(this.discount));
@@ -35,10 +47,6 @@ public class ItemRental {
 
     public ItemRentalPk getId() {
         return id;
-    }
-
-    public void setId(ItemRentalPk id) {
-        this.id = id;
     }
 
     public BigDecimal getPrice() {

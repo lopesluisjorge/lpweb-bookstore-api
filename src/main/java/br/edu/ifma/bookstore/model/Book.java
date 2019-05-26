@@ -70,7 +70,7 @@ public class Book {
     @JoinTable(name = "book_tag",
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private final List<@NotEmpty Tag> tags = new ArrayList<>();
+    private final List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
     private final Set<Item> items = new LinkedHashSet<>();

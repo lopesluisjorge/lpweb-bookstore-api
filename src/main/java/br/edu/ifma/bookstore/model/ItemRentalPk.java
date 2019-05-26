@@ -19,6 +19,7 @@ public class ItemRentalPk implements Serializable {
     @JoinColumn(name = "rental_id")
     private Rental rental;
 
+    @Deprecated
     public ItemRentalPk() {
     }
 

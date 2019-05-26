@@ -1,15 +1,11 @@
 package br.edu.ifma.bookstore.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +32,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @Value("${page.length}")
+    @Value("${bookstore.pagination.length}")
     private Integer pageLength;
 
     @GetMapping
@@ -48,7 +44,7 @@ public class BookController {
         final var pageReq = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
 
         final var paginatedBooks = bookService.paginate(pageReq);
-        final Page<BookDto> paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
+        final var paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
         final ResponseMessage<Page<BookDto>> response = new ResponseMessage<>();
         response.setContent(paginatedBookDtos);

@@ -34,16 +34,20 @@ public class Item {
     @Column(nullable = false, unique = true)
     private String code;
 
-    private BigDecimal rentalPrice;
-
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
 
     @OneToMany(mappedBy = "id.item")
     private Set<ItemRental> itemRentals = new LinkedHashSet<>();
 
-    public void beforePersist() {
-        this.rentalPrice = book.getPrice();
+    @Deprecated
+    public Item() {
+    }
+
+    public static Item of(Book book) {
+        final Item item = new Item();
+        item.book = book;
+        return item;
     }
 
     public Long getId() {
@@ -52,10 +56,6 @@ public class Item {
 
     public Book getBook() {
         return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
     }
 
     public String getCode() {
@@ -67,7 +67,7 @@ public class Item {
     }
 
     public BigDecimal getPrice() {
-        return rentalPrice;
+        return book.getPrice();
     }
 
     public ItemStatus getStatus() {
