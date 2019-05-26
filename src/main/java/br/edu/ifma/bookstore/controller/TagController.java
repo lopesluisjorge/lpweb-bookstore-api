@@ -1,10 +1,12 @@
 package br.edu.ifma.bookstore.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifma.bookstore.controller.response.ResponseMessage;
@@ -19,10 +21,13 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping
-    public ResponseMessage<List<Tag>> getAll() {
-        var tags = tagService.findAll();
+    public ResponseMessage<Page<Tag>> paginate(
+            @RequestParam(defaultValue = "0") Integer page) {
+        final var pageReq = PageRequest.of(page, 10, Sort.Direction.valueOf("ASC"), "tag");
 
-        final ResponseMessage<List<Tag>> response = new ResponseMessage<>();
+        final var tags = tagService.paginate(pageReq);
+
+        final ResponseMessage<Page<Tag>> response = new ResponseMessage<>();
         response.setContent(tags);
 
         return response;
