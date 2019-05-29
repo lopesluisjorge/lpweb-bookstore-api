@@ -47,7 +47,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
         final var fieldErrors = exception.getBindingResult().getFieldErrors();
 
         final var errors = fieldErrors.stream()
-                .map(fieldError -> new ErrorMessage(fieldError.getDefaultMessage(), exception.getLocalizedMessage()))
+                .map((fieldError) -> new ErrorMessage(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
         final var response = new ResponseMessage<Object>();
@@ -58,7 +58,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseMessage<ErrorMessage> handleEmptyResultDataAccess(EmptyResultDataAccessException exception) {
-        final var message = String.format("Resourse not found. Expected: %d, Found: %d",
+        final var message = String.format("Recurso não encontrado. Expectativa: %d, Encontrado: %d",
                                           exception.getExpectedSize(), exception.getActualSize());
 
         final var response = new ResponseMessage<ErrorMessage>();

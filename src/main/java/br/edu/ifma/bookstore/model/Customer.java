@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -34,8 +36,9 @@ public class Customer {
 
     private String name;
 
+    @NotNull
     @CPF
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @NotNull
@@ -43,9 +46,11 @@ public class Customer {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Address address;
 
+    @NotNull
+    @Email
     private String email;
 
     @ElementCollection

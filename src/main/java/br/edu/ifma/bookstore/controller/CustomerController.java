@@ -2,6 +2,8 @@ package br.edu.ifma.bookstore.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage<Customer>> create(@RequestBody Customer customer) {
+    public ResponseEntity<ResponseMessage<Customer>> create(@Valid @RequestBody Customer customer) {
         final var savedCustomer = customerService.save(customer);
 
         final var locationUri = ServletUriComponentsBuilder
