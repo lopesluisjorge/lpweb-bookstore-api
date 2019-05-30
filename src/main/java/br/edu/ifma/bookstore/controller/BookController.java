@@ -1,16 +1,10 @@
 package br.edu.ifma.bookstore.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,13 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifma.bookstore.controller.dto.BookDto;
 import br.edu.ifma.bookstore.controller.response.ResponseMessage;
+import br.edu.ifma.bookstore.repository.filter.BookFilter;
 import br.edu.ifma.bookstore.service.BookService;
 
 @RestController
@@ -36,24 +30,9 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @Value("${bookstore.pagination.length}")
-    private Integer pageLength;
-
     @GetMapping
-    public ResponseMessage<Page<BookDto>> queryPaginated(
-            @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "") String tags,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "3") Integer size,
-            @RequestParam(defaultValue = "title") String orderBy,
-            @RequestParam(defaultValue = "ASC") String direction) {
-        final List<Integer> tagIds = Arrays.asList(tags.split(",")).stream()
-                .map(s -> Integer.valueOf(s))
-                .collect(Collectors.toList());
-
-        final var pageReq = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-
-        final var paginatedBooks = bookService.findBy(name, tagIds, pageReq);
+    public ResponseMessage<Page<BookDto>> queryPaginated(BookFilter bookFilter, Pageable pageable) {
+        final var paginatedBooks = bookService.findBy(bookFilter, pageable);
         final var paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
         final ResponseMessage<Page<BookDto>> response = new ResponseMessage<>();

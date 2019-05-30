@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifma.bookstore.model.Book;
 import br.edu.ifma.bookstore.repository.BookRepository;
+import br.edu.ifma.bookstore.repository.filter.BookFilter;
 
 @Service
 public class BookService {
@@ -39,6 +41,11 @@ public class BookService {
     public Page<Book> findBy(String title, List<Integer> tagIds, Pageable page) {
         final var tags = tagService.findAllBy(tagIds);
         return bookRepository.findPagesByTitleAndTags(title, tags, page);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Book> findBy(BookFilter bookFilter, Pageable page) {
+        return bookRepository.filterBy(bookFilter, page);
     }
 
     @Transactional

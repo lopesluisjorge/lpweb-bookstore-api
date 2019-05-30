@@ -10,8 +10,9 @@ import org.springframework.data.repository.query.Param;
 
 import br.edu.ifma.bookstore.model.Book;
 import br.edu.ifma.bookstore.model.Tag;
+import br.edu.ifma.bookstore.repository.book.BookRepositoryQuery;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryQuery {
 
     @Query("SELECT DISTINCT b FROM Book b INNER JOIN b.tags t WHERE b.title LIKE %:title% AND t IN (:tags)")
     Page<Book> findPagesByTitleAndTags(@Param(value = "title") String title, @Param(value = "tags") List<Tag> tags, Pageable page);
