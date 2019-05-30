@@ -1,5 +1,7 @@
 package br.edu.ifma.bookstore.service;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -28,6 +33,12 @@ public class BookService {
     @Transactional(readOnly = true)
     public Book findBy(Long id) {
         return bookRepository.findById(id).get();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Book> findBy(String title, List<Integer> tagIds, Pageable page) {
+        final var tags = tagService.findAllBy(tagIds);
+        return bookRepository.findPagesByTitleAndTags(title, tags, page);
     }
 
     @Transactional

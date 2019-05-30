@@ -1,5 +1,7 @@
 package br.edu.ifma.bookstore.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,11 @@ public class TagService {
     @Transactional(readOnly = true)
     public Tag findBy(Integer id) {
         return tagRepository.findById(id).get();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tag> findAllBy(List<Integer> tagIds) {
+        return tagRepository.findAllById(tagIds);
     }
 
 }

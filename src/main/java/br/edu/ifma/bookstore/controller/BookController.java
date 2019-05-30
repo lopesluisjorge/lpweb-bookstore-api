@@ -1,5 +1,9 @@
 package br.edu.ifma.bookstore.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +41,19 @@ public class BookController {
 
     @GetMapping
     public ResponseMessage<Page<BookDto>> queryPaginated(
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String tags,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "3") Integer size,
             @RequestParam(defaultValue = "title") String orderBy,
             @RequestParam(defaultValue = "ASC") String direction) {
+        final List<Integer> tagIds = Arrays.asList(tags.split(",")).stream()
+                .map(s -> Integer.valueOf(s))
+                .collect(Collectors.toList());
+
         final var pageReq = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
 
-        final var paginatedBooks = bookService.paginate(pageReq);
+        final var paginatedBooks = bookService.findBy(name, tagIds, pageReq);
         final var paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
         final ResponseMessage<Page<BookDto>> response = new ResponseMessage<>();
