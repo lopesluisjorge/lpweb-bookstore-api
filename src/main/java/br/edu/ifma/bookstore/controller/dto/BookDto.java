@@ -55,7 +55,7 @@ public final class BookDto {
         return dto;
     }
 
-    public Book bookIgnoringNullAttributesInDto(final Book book) {
+    public Book getBookIgnoringNullAttributesInDto(final Book book) {
         BeanUtils.copyProperties(this, book, ObjectAtributes.getNullAttributesOf(this));
         return book;
     }

@@ -29,7 +29,6 @@ public class BookRepositoryImpl implements BookRepositoryQuery {
     @Override
     public Page<Book> filterBy(BookFilter bookFilter, Pageable page) {
         final CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-
         final CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
 
         final Root<Book> queryRoot = query.from(Book.class);

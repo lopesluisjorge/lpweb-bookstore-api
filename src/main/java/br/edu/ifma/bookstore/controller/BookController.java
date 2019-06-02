@@ -35,20 +35,14 @@ public class BookController {
         final var paginatedBooks = bookService.findBy(bookFilter, pageable);
         final var paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
-        final ResponseMessage<Page<BookDto>> response = new ResponseMessage<>();
-        response.setContent(paginatedBookDtos);
-
-        return response;
+        return ResponseMessage.of(paginatedBookDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseMessage<BookDto> getBookById(@PathVariable Long id) {
         final var book = bookService.findBy(id);
 
-        final ResponseMessage<BookDto> response = new ResponseMessage<>();
-        response.setContent(BookDto.createFrom(book));
-
-        return response;
+        return ResponseMessage.of(BookDto.createFrom(book));
     }
 
     @PostMapping
@@ -63,22 +57,16 @@ public class BookController {
                 .buildAndExpand(savedBook.getId())
                 .toUri();
 
-        final ResponseMessage<BookDto> response = new ResponseMessage<>();
-        response.setContent(BookDto.createFrom(book));
-
-        return ResponseEntity.created(locationUri).body(response);
+        return ResponseEntity.created(locationUri).body(ResponseMessage.of(book));
     }
 
     @PutMapping("/{id}")
     public ResponseMessage<BookDto> update(@PathVariable Long id, @RequestBody BookDto bookDto) {
         final var book = bookService.findBy(id);
-        final var toUpdate = bookDto.bookIgnoringNullAttributesInDto(book);
+        final var toUpdate = bookDto.getBookIgnoringNullAttributesInDto(book);
         final var updatedBook = bookService.update(id, toUpdate);
 
-        final ResponseMessage<BookDto> response = new ResponseMessage<>();
-        response.setContent(BookDto.createFrom(updatedBook));
-
-        return response;
+        return ResponseMessage.of(BookDto.createFrom(updatedBook));
     }
 
     @DeleteMapping("/{id}")

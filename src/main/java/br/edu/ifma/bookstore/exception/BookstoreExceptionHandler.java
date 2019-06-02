@@ -32,9 +32,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         final var message = messageSource.getMessage("parameter.invalid", null, new Locale("pt", "BR"));
 
-        final var response = new ResponseMessage<Object>();
-
-        response.add(new ErrorMessage(message, exeption.getLocalizedMessage()));
+        final ResponseMessage<Object> response = ResponseMessage.of(new ErrorMessage(message, exeption.getLocalizedMessage()));
 
         return super.handleExceptionInternal(exeption, response, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -50,22 +48,17 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                 .map((fieldError) -> new ErrorMessage(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        final var response = new ResponseMessage<Object>();
-        errors.forEach(error -> response.add(error));
+        final ResponseMessage<Object> response = ResponseMessage.of(errors.toArray());
 
         return super.handleExceptionInternal(exception, response, headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseMessage<ErrorMessage> handleEmptyResultDataAccess(EmptyResultDataAccessException exception) {
+    public ResponseMessage<Object> handleEmptyResultDataAccess(EmptyResultDataAccessException exception) {
         final var message = String.format("Recurso não encontrado. Expectativa: %d, Encontrado: %d",
                                           exception.getExpectedSize(), exception.getActualSize());
 
-        final var response = new ResponseMessage<ErrorMessage>();
-
-        response.add(new ErrorMessage(message, exception.getMostSpecificCause().toString()));
-
-        return response;
+        return ResponseMessage.of(new ErrorMessage(message, exception.getMostSpecificCause().toString()));
     }
 
 }

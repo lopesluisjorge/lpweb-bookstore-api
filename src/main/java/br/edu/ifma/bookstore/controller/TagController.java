@@ -27,10 +27,7 @@ public class TagController {
 
         final var tags = tagService.paginate(pageReq);
 
-        final ResponseMessage<Page<Tag>> response = new ResponseMessage<>();
-        response.setContent(tags);
-
-        return response;
+        return ResponseMessage.of(tags);
     }
 
 }

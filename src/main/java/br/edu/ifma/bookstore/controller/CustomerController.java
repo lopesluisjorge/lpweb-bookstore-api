@@ -1,20 +1,15 @@
 package br.edu.ifma.bookstore.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,24 +24,11 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping
-    public ResponseMessage<List<Customer>> getAll() {
-        final var customers = customerService.findAll();
-
-        final ResponseMessage<List<Customer>> response = new ResponseMessage<>();
-        response.setContent(customers);
-
-        return response;
-    }
-
     @GetMapping("/{id}")
     public ResponseMessage<Customer> getBookById(@PathVariable Long id) {
         final var customer = customerService.findBy(id);
 
-        final ResponseMessage<Customer> response = new ResponseMessage<>();
-        response.setContent(customer);
-
-        return response;
+        return ResponseMessage.of(customer);
     }
 
     @PostMapping
@@ -59,10 +41,7 @@ public class CustomerController {
                 .buildAndExpand(savedCustomer.getId())
                 .toUri();
 
-        final ResponseMessage<Customer> response = new ResponseMessage<>();
-        response.setContent(savedCustomer);
-
-        return ResponseEntity.created(locationUri).body(response);
+        return ResponseEntity.created(locationUri).body(ResponseMessage.of(savedCustomer));
     }
 
     @PutMapping("/{id}")
@@ -70,16 +49,7 @@ public class CustomerController {
         final var toUpdate = customerService.findBy(id);
         final var updatedcustomer = customerService.update(id, toUpdate);
 
-        final ResponseMessage<Customer> response = new ResponseMessage<>();
-        response.setContent(updatedcustomer);
-
-        return response;
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void remove(@PathVariable Long id) {
-        customerService.deleteBy(id);
+        return ResponseMessage.of(updatedcustomer);
     }
 
 }

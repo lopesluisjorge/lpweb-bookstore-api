@@ -9,6 +9,21 @@ public class ResponseMessage<T> {
     private T content;
     private final Set<ErrorMessage> errors = new HashSet<>();
 
+    private ResponseMessage() {
+    }
+
+    public static ResponseMessage of(Object t) {
+        final ResponseMessage responseMessage = new ResponseMessage<>();
+        responseMessage.setContent(t);
+        return responseMessage;
+    }
+
+    public static ResponseMessage of(ErrorMessage... errors) {
+        final ResponseMessage responseMessage = new ResponseMessage<>();
+        responseMessage.add(errors);
+        return responseMessage;
+    }
+
     public T getContent() {
         return content;
     }
