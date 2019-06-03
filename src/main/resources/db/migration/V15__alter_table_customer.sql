@@ -1,0 +1,10 @@
+ALTER TABLE customer
+  ADD COLUMN gender CHAR(1);
+
+ALTER TABLE customer
+  ALTER COLUMN name SET NOT NULL,
+  ALTER COLUMN cpf SET NOT NULL,
+  ALTER COLUMN birthdate SET NOT NULL,
+  ALTER COLUMN email SET NOT NULL;
+
+CREATE UNIQUE INDEX customer_cpf_key ON customer (cpf);

@@ -43,7 +43,7 @@ public class Address {
     @NotEmpty
     private String city;
 
-    @Column(name = "state", length = 2)
+    @Column(name = "uf", length = 2)
     private String uf;
 
     @Lob

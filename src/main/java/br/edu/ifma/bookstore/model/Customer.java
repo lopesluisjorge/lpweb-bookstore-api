@@ -12,6 +12,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +26,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "customer")
@@ -34,6 +37,9 @@ public class Customer {
     @SequenceGenerator(name = "customer_id_seq", sequenceName = "customer_id_seq", allocationSize = 1)
     private Long id;
 
+    @NotEmpty
+    @Size(max = 255)
+    @Column(nullable = false)
     private String name;
 
     @NotNull
@@ -52,6 +58,9 @@ public class Customer {
     @NotNull
     @Email
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @ElementCollection
     @CollectionTable(name = "phones",
@@ -104,6 +113,14 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Set<String> getPhones() {
