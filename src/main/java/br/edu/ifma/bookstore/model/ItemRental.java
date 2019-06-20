@@ -35,13 +35,13 @@ public class ItemRental {
 
     public ItemRental(ItemRentalPk itemRentalPk) {
         this.id = itemRentalPk;
-        var itemPrice = id.getItem().getPrice();
+        final BigDecimal itemPrice = id.getItem().getPrice();
         this.rentalPrice = itemPrice.subtract(itemPrice.multiply(this.discount));
     }
 
     @PrePersist
     public void beforePersist() {
-        var itemPrice = id.getItem().getPrice();
+        final BigDecimal itemPrice = id.getItem().getPrice();
         this.rentalPrice = itemPrice.subtract(itemPrice.multiply(this.discount));
     }
 

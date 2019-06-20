@@ -1,5 +1,7 @@
 package br.edu.ifma.bookstore.controller;
 
+import java.net.URI;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.edu.ifma.bookstore.controller.dto.BookDto;
 import br.edu.ifma.bookstore.controller.response.ResponseMessage;
+import br.edu.ifma.bookstore.model.Book;
 import br.edu.ifma.bookstore.repository.filter.BookFilter;
 import br.edu.ifma.bookstore.service.BookService;
 
@@ -32,26 +35,26 @@ public class BookController {
 
     @GetMapping
     public ResponseMessage<Page<BookDto>> queryPaginated(BookFilter bookFilter, Pageable pageable) {
-        final var paginatedBooks = bookService.findBy(bookFilter, pageable);
-        final var paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
+        final Page<Book> paginatedBooks = bookService.findBy(bookFilter, pageable);
+        final Page<BookDto> paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
         return ResponseMessage.of(paginatedBookDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseMessage<BookDto> getBookById(@PathVariable Long id) {
-        final var book = bookService.findBy(id);
+        final Book book = bookService.findBy(id);
 
         return ResponseMessage.of(BookDto.createFrom(book));
     }
 
     @PostMapping
     public ResponseEntity<ResponseMessage<BookDto>> create(@Valid @RequestBody BookDto bookDto) {
-        final var book = bookDto.getBook();
-        final var savedBook = bookService.save(book);
+        final Book book = bookDto.getBook();
+        final Book savedBook = bookService.save(book);
         bookDto = BookDto.createFrom(book);
 
-        final var locationUri = ServletUriComponentsBuilder
+        final URI locationUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(savedBook.getId())
@@ -62,9 +65,9 @@ public class BookController {
 
     @PutMapping("/{id}")
     public ResponseMessage<BookDto> update(@PathVariable Long id, @RequestBody BookDto bookDto) {
-        final var book = bookService.findBy(id);
-        final var toUpdate = bookDto.getBookIgnoringNullAttributesInDto(book);
-        final var updatedBook = bookService.update(id, toUpdate);
+        final Book book = bookService.findBy(id);
+        final Book toUpdate = bookDto.getBookIgnoringNullAttributesInDto(book);
+        final Book updatedBook = bookService.update(id, toUpdate);
 
         return ResponseMessage.of(BookDto.createFrom(updatedBook));
     }

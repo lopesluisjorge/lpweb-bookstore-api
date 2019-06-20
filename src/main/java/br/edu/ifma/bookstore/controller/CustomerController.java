@@ -1,5 +1,7 @@
 package br.edu.ifma.bookstore.controller;
 
+import java.net.URI;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,16 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public ResponseMessage<Customer> getBookById(@PathVariable Long id) {
-        final var customer = customerService.findBy(id);
+        final Customer customer = customerService.findBy(id);
 
         return ResponseMessage.of(customer);
     }
 
     @PostMapping
     public ResponseEntity<ResponseMessage<Customer>> create(@Valid @RequestBody Customer customer) {
-        final var savedCustomer = customerService.save(customer);
+        final Customer savedCustomer = customerService.save(customer);
 
-        final var locationUri = ServletUriComponentsBuilder
+        final URI locationUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(savedCustomer.getId())
@@ -46,8 +48,8 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseMessage<Customer> update(@PathVariable Long id, @RequestBody Customer customer) {
-        final var toUpdate = customerService.findBy(id);
-        final var updatedcustomer = customerService.update(id, toUpdate);
+        final Customer toUpdate = customerService.findBy(id);
+        final Customer updatedcustomer = customerService.update(id, toUpdate);
 
         return ResponseMessage.of(updatedcustomer);
     }

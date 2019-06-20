@@ -23,9 +23,9 @@ public class TagController {
     @GetMapping
     public ResponseMessage<Page<Tag>> paginate(
             @RequestParam(defaultValue = "0") Integer page) {
-        final var pageReq = PageRequest.of(page, 10, Sort.Direction.valueOf("ASC"), "tag");
+        final PageRequest pageReq = PageRequest.of(page, 10, Sort.Direction.valueOf("ASC"), "tag");
 
-        final var tags = tagService.paginate(pageReq);
+        final Page<Tag> tags = tagService.paginate(pageReq);
 
         return ResponseMessage.of(tags);
     }

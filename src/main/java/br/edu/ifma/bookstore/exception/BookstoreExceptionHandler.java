@@ -1,5 +1,6 @@
 package br.edu.ifma.bookstore.exception;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,7 +32,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-        final var message = messageSource.getMessage("parameter.invalid", null, new Locale("pt", "BR"));
+        final String message = messageSource.getMessage("parameter.invalid", null, new Locale("pt", "BR"));
 
         final ResponseMessage<Object> response = ResponseMessage.of(new ErrorMessage(message, exeption.getLocalizedMessage()));
 
@@ -42,9 +44,9 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-        final var fieldErrors = exception.getBindingResult().getFieldErrors();
+        final List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 
-        final var errors = fieldErrors.stream()
+        List<ErrorMessage> errors = fieldErrors.stream()
                 .map((fieldError) -> new ErrorMessage(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
@@ -55,7 +57,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseMessage<Object> handleEmptyResultDataAccess(EmptyResultDataAccessException exception) {
-        final var message = String.format("Recurso não encontrado. Expectativa: %d, Encontrado: %d",
+        final String message = String.format("Recurso não encontrado. Expectativa: %d, Encontrado: %d",
                                           exception.getExpectedSize(), exception.getActualSize());
 
         return ResponseMessage.of(new ErrorMessage(message, exception.getMostSpecificCause().toString()));

@@ -37,7 +37,7 @@ public class CustomerService {
 
     @Transactional
     public Customer update(Long id, Customer book) {
-        final var onDatabaseBook = findBy(id);
+        final Customer onDatabaseBook = findBy(id);
         BeanUtils.copyProperties(book, onDatabaseBook, "id");
 
         return onDatabaseBook;

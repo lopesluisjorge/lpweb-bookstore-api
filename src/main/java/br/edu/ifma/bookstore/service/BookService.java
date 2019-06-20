@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifma.bookstore.model.Book;
+import br.edu.ifma.bookstore.model.Tag;
 import br.edu.ifma.bookstore.repository.BookRepository;
 import br.edu.ifma.bookstore.repository.filter.BookFilter;
 
@@ -38,7 +39,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public Page<Book> findBy(String title, List<Integer> tagIds, Pageable page) {
-        final var tags = tagService.findAllBy(tagIds);
+        final List<Tag> tags = tagService.findAllBy(tagIds);
         return bookRepository.findPagesByTitleAndTags(title, tags, page);
     }
 
@@ -54,7 +55,7 @@ public class BookService {
 
     @Transactional
     public Book update(Long id, Book book) {
-        final var onDatabaseBook = findBy(id);
+        final Book onDatabaseBook = findBy(id);
         BeanUtils.copyProperties(book, onDatabaseBook, "id");
 
         return onDatabaseBook;
