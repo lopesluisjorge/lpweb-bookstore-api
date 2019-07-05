@@ -38,7 +38,7 @@ public class Rental {
     private Customer customer;
 
     @OneToMany(mappedBy = "id.rental")
-    private Set<ItemRental> itemRentals = new LinkedHashSet<>();
+    private Set<ItemRental> itemsRental = new LinkedHashSet<>();
 
     @JsonIgnore
     private LocalDateTime createdAt;
@@ -87,12 +87,12 @@ public class Rental {
         this.customer = customer;
     }
 
-    public Set<ItemRental> getItemRentals() {
-        return itemRentals;
+    public Set<ItemRental> getItemsRental() {
+        return itemsRental;
     }
 
-    public void add(ItemRental... itemRentals) {
-        this.itemRentals.addAll(Arrays.asList(itemRentals));
+    public void add(ItemRental... itemsRental) {
+        this.itemsRental.addAll(Arrays.asList(itemsRental));
     }
 
     public LocalDateTime getCreatedAt() {
@@ -103,18 +103,18 @@ public class Rental {
         return updatedAt;
     }
 
+    private BigDecimal calculeSubtotal() {
+        return itemsRental.stream()
+                .map(itemRental -> itemRental.getPrice())
+                .reduce(BigDecimal.ZERO, (sum, price) -> sum.add(price));
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
-    }
-
-    private BigDecimal calculeSubtotal() {
-        return itemRentals.stream()
-                .map(itemRental -> itemRental.getPrice())
-                .reduce(BigDecimal.ZERO, (sum, price) -> sum.add(price));
     }
 
     @Override
