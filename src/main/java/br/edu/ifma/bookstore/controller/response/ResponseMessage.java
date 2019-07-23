@@ -12,14 +12,14 @@ public class ResponseMessage<T> {
     private ResponseMessage() {
     }
 
-    public static ResponseMessage of(Object t) {
-        final ResponseMessage responseMessage = new ResponseMessage<>();
+    public static <T> ResponseMessage<T> of(T t) {
+        final ResponseMessage<T> responseMessage = new ResponseMessage<>();
         responseMessage.setContent(t);
         return responseMessage;
     }
 
-    public static ResponseMessage of(ErrorMessage... errors) {
-        final ResponseMessage responseMessage = new ResponseMessage<>();
+    public static <T> ResponseMessage<T> of(ErrorMessage... errors) {
+        final ResponseMessage<T> responseMessage = new ResponseMessage<>();
         responseMessage.add(errors);
         return responseMessage;
     }

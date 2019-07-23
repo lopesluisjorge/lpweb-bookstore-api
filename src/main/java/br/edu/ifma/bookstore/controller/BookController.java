@@ -49,10 +49,10 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage<BookDto>> create(@Valid @RequestBody BookDto bookDto) {
+    public ResponseEntity<ResponseMessage<BookDto>> create(final @Valid @RequestBody BookDto bookDto) {
         final Book book = bookDto.getBook();
-        final Book savedBook = bookService.save(book);
-        bookDto = BookDto.createFrom(book);
+        Book savedBook = bookService.save(book);
+        BookDto savedBookDto = BookDto.createFrom(book);
 
         final URI locationUri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -60,7 +60,7 @@ public class BookController {
                 .buildAndExpand(savedBook.getId())
                 .toUri();
 
-        return ResponseEntity.created(locationUri).body(ResponseMessage.of(book));
+        return ResponseEntity.created(locationUri).body(ResponseMessage.of(savedBookDto));
     }
 
     @PutMapping("/{id}")
