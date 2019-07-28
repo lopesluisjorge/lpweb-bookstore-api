@@ -35,7 +35,7 @@ public class BookController {
 
     @GetMapping
     public ResponseMessage<Page<BookDto>> queryPaginated(BookFilter bookFilter, Pageable pageable) {
-        final Page<Book> paginatedBooks = bookService.findBy(bookFilter, pageable);
+        final Page<Book> paginatedBooks = bookService.search(bookFilter, pageable);
         final Page<BookDto> paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
         return ResponseMessage.of(paginatedBookDtos);

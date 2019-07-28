@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifma.bookstore.model.Book;
 import br.edu.ifma.bookstore.model.Tag;
@@ -19,51 +18,46 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
+    private final CrudService<Book, Long> crudService;
+    
     @Autowired
     private TagService tagService;
 
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+        this.crudService = new CrudService<>(bookRepository);
     }
 
-    @Transactional(readOnly = true)
     public Page<Book> paginate(Pageable page) {
-        return bookRepository.findAll(page);
+        return crudService.paginate(page);
     }
 
-    @Transactional(readOnly = true)
     public Book findBy(Long id) {
-        return bookRepository.findById(id).get();
+        return crudService.findBy(id);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Book> findBy(String title, List<Integer> tagIds, Pageable page) {
+    public Page<Book> search(String title, List<Integer> tagIds, Pageable page) {
         final List<Tag> tags = tagService.findAllBy(tagIds);
         return bookRepository.findPagesByTitleAndTags(title, tags, page);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Book> findBy(BookFilter bookFilter, Pageable page) {
+    public Page<Book> search(BookFilter bookFilter, Pageable page) {
         return bookRepository.filterBy(bookFilter, page);
     }
 
-    @Transactional
     public Book save(Book book) {
-        return bookRepository.save(book);
+        Book toPersist = new Book();
+        BeanUtils.copyProperties(book, toPersist, "id");
+        return crudService.save(book);
     }
 
-    @Transactional
     public Book update(Long id, Book book) {
-        final Book onDatabaseBook = findBy(id);
-        BeanUtils.copyProperties(book, onDatabaseBook, "id");
-
-        return onDatabaseBook;
+        return crudService.update(id, book);
     }
 
-    @Transactional
     public void deleteBy(Long id) {
-        bookRepository.deleteById(id);
+        crudService.deleteBy(id);
     }
 
 }

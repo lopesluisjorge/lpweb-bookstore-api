@@ -31,7 +31,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.hibernate.validator.constraints.ISBN;
 
 @Entity
 @Table(name = "book")
@@ -45,7 +44,6 @@ public class Book {
     private Long id;
 
     @NotNull
-    @ISBN
     @Column(unique = true)
     private String isbn;
 

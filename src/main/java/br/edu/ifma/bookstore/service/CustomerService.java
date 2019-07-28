@@ -1,11 +1,8 @@
 package br.edu.ifma.bookstore.service;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifma.bookstore.model.Customer;
 import br.edu.ifma.bookstore.repository.CustomerRepository;
@@ -15,37 +12,27 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
+    private final CrudService<Customer, Long> crudService;
+
     @Autowired
-    public CustomerService(CustomerRepository bookRepository) {
-        this.customerRepository = bookRepository;
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+
+        this.crudService = new CrudService<>(customerRepository);
     }
 
-    @Transactional(readOnly = true)
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
     public Customer findBy(Long id) {
-        return customerRepository.findById(id).get();
+        return crudService.findBy(id);
     }
 
-    @Transactional
-    public Customer save(Customer book) {
-        return customerRepository.save(book);
+    public Customer save(Customer customer) {
+        Customer toSave = new Customer();
+        BeanUtils.copyProperties(customer, toSave, "id");
+        return customerRepository.save(customer);
     }
 
-    @Transactional
-    public Customer update(Long id, Customer book) {
-        final Customer onDatabaseBook = findBy(id);
-        BeanUtils.copyProperties(book, onDatabaseBook, "id");
-
-        return onDatabaseBook;
-    }
-
-    @Transactional
-    public void deleteBy(Long id) {
-        customerRepository.deleteById(id);
+    public Customer update(Long id, Customer customer) {
+        return crudService.update(id, customer);
     }
 
 }

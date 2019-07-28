@@ -23,7 +23,7 @@ public final class BookDto {
     private Long id;
 
     @NotNull
-    @ISBN
+    // @ISBN
     private String isbn;
 
     @NotNull
