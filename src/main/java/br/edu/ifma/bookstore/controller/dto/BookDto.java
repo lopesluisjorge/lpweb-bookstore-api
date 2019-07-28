@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -31,10 +31,10 @@ public final class BookDto {
     @Size(min = 5)
     private String title;
 
-    @NotEmpty
+    @NotBlank
     private String publishingCompany;
 
-    @NotEmpty
+    @NotBlank
     private String author;
 
     private Integer releaseYear;
@@ -53,6 +53,7 @@ public final class BookDto {
         return dto;
     }
 
+    @JsonIgnore
     public Book getBookIgnoringNullAttributesInDto(final Book book) {
         BeanUtils.copyProperties(this, book, ObjectAtributes.getNullAttributesOf(this));
         return book;

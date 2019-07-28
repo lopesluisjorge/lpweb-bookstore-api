@@ -2,10 +2,8 @@ package br.edu.ifma.bookstore.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,14 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -36,7 +31,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "book")
 @SQLDelete(sql = "UPDATE book SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "deleted_at IS NULL")
 public class Book {
@@ -54,27 +48,23 @@ public class Book {
     @Size(min = 5)
     private String title;
 
-    @NotEmpty
+    @NotBlank
     @Column(name = "publishing_company")
     private String publishingCompany;
 
-    @NotEmpty
+    @NotBlank
     private String author;
 
     @Column(name = "release_year")
     private Integer releaseYear;
 
-    @Lob
     private String subject;
 
     @ManyToMany
     @JoinTable(name = "book_tag",
                joinColumns = @JoinColumn(name = "book_id"),
                inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private final List<Tag> tags = new ArrayList<>();
-
-    @OneToMany(mappedBy = "book")
-    private final Set<Item> items = new LinkedHashSet<>();
+    private final Set<Tag> tags = new LinkedHashSet<>();
 
     @NotNull
     @Positive
@@ -83,13 +73,10 @@ public class Book {
     @PositiveOrZero
     private Integer stock = 0;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
+    
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @PrePersist
@@ -106,7 +93,7 @@ public class Book {
         this.tags.addAll(Arrays.asList(tags));
     }
 
-    public Integer addToStock(int quantity) {
+    public Integer addToStock(Integer quantity) {
         return stock += quantity;
     }
 

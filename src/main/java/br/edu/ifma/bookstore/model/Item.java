@@ -17,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,7 +24,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "item")
 public class Item {
 
     @Id
@@ -44,14 +42,14 @@ public class Item {
     private ItemStatus status;
 
     @OneToMany(mappedBy = "id.item")
-    private Set<ItemRental> itemRentals = new LinkedHashSet<>();
+    private final Set<ItemRental> itemRentals = new LinkedHashSet<>();
 
     public static Item of(Book book) {
         final Item item = new Item();
         item.book = book;
         return item;
     }
-    
+
     @JsonIgnore
     @Transient
     public BigDecimal getPrice() {

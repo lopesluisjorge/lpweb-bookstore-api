@@ -6,9 +6,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 @Embeddable
 public class ItemRentalPk implements Serializable {
 
@@ -21,11 +23,6 @@ public class ItemRentalPk implements Serializable {
     @ManyToOne
     @JoinColumn(name = "rental_id")
     private final Rental rental;
-
-    public ItemRentalPk(Item item, Rental rental) {
-        this.item = item;
-        this.rental = rental;
-    }
 
     @Override
     public int hashCode() {

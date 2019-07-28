@@ -1,24 +1,17 @@
 package br.edu.ifma.bookstore.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tag")
 public class Tag {
 
     @Id
@@ -26,17 +19,13 @@ public class Tag {
     @SequenceGenerator(name = "tag_id_seq", sequenceName = "tag_id_seq", allocationSize = 1)
     private Integer id;
 
+    @NotNull
+    @NotBlank
     private String name;
 
+    @NotNull
+    @NotBlank
     private String tag;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "tags")
-    private final List<Book> books = new ArrayList<>();
-
-    public void add(Book... books) {
-        this.books.addAll(Arrays.asList(books));
-    }
 
     @Override
     public int hashCode() {

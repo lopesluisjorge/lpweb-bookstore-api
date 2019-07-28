@@ -1,11 +1,6 @@
 package br.edu.ifma.bookstore.model;
 
-import org.hibernate.validator.constraints.br.CPF;
-
-import lombok.Data;
-
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,19 +15,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.br.CPF;
+
+import lombok.Data;
+
 @Data
 @Entity
-@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -40,7 +37,7 @@ public class Customer {
     @SequenceGenerator(name = "customer_id_seq", sequenceName = "customer_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 255)
     @Column(nullable = false)
     private String name;
@@ -71,15 +68,8 @@ public class Customer {
     @Column(name = "phone")
     private final Set<@NotEmpty String> phones = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customer")
-    private final Set<Rental> rentals = new LinkedHashSet<>();
-
     public void addPhone(String phone) {
         this.phones.add(phone);
-    }
-    
-    public void add(Rental... rentals) {
-        this.rentals.addAll(Arrays.asList(rentals));
     }
 
     @Override

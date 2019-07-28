@@ -16,7 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,15 +25,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "rental")
 public class Rental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rental_id_seq")
     @SequenceGenerator(name = "rental_id_seq", sequenceName = "rental_id_seq", allocationSize = 1)
     private Long id;
-
-    private BigDecimal subtotal;
 
     private LocalDate rentalDate;
 
@@ -41,7 +39,7 @@ public class Rental {
     private Customer customer;
 
     @OneToMany(mappedBy = "id.rental")
-    private Set<ItemRental> itemsRental = new LinkedHashSet<>();
+    private final Set<@NotEmpty ItemRental> itemsRental = new LinkedHashSet<>();
 
     @JsonIgnore
     private LocalDateTime createdAt;
@@ -51,7 +49,6 @@ public class Rental {
 
     @PrePersist
     public void beforePersist() {
-        this.subtotal = calculeSubtotal();
         this.createdAt = LocalDateTime.now();
     }
 
@@ -59,11 +56,9 @@ public class Rental {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Transient
     public BigDecimal getSubtotal() {
-        if (subtotal == null) {
-            return calculeSubtotal();
-        }
-        return subtotal;
+        return calculeSubtotal();
     }
 
     public void add(ItemRental... itemsRental) {
