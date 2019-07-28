@@ -38,14 +38,14 @@ public class BookController {
         final Page<Book> paginatedBooks = bookService.search(bookFilter, pageable);
         final Page<BookDto> paginatedBookDtos = paginatedBooks.map(book -> BookDto.createFrom(book));
 
-        return ResponseMessage.of(paginatedBookDtos);
+        return ResponseMessage.ofContent(paginatedBookDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseMessage<BookDto> getBookById(@PathVariable Long id) {
         final Book book = bookService.findBy(id);
 
-        return ResponseMessage.of(BookDto.createFrom(book));
+        return ResponseMessage.ofContent(BookDto.createFrom(book));
     }
 
     @PostMapping
@@ -60,7 +60,7 @@ public class BookController {
                 .buildAndExpand(savedBook.getId())
                 .toUri();
 
-        return ResponseEntity.created(locationUri).body(ResponseMessage.of(savedBookDto));
+        return ResponseEntity.created(locationUri).body(ResponseMessage.ofContent(savedBookDto));
     }
 
     @PutMapping("/{id}")
@@ -69,7 +69,7 @@ public class BookController {
         final Book toUpdate = bookDto.getBookIgnoringNullAttributesInDto(book);
         final Book updatedBook = bookService.update(id, toUpdate);
 
-        return ResponseMessage.of(BookDto.createFrom(updatedBook));
+        return ResponseMessage.ofContent(BookDto.createFrom(updatedBook));
     }
 
     @DeleteMapping("/{id}")

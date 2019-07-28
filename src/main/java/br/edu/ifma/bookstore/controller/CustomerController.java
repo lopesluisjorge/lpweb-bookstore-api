@@ -30,7 +30,7 @@ public class CustomerController {
     public ResponseMessage<Customer> getBookById(@PathVariable Long id) {
         final Customer customer = customerService.findBy(id);
 
-        return ResponseMessage.of(customer);
+        return ResponseMessage.ofContent(customer);
     }
 
     @PostMapping
@@ -43,7 +43,7 @@ public class CustomerController {
                 .buildAndExpand(savedCustomer.getId())
                 .toUri();
 
-        return ResponseEntity.created(locationUri).body(ResponseMessage.of(savedCustomer));
+        return ResponseEntity.created(locationUri).body(ResponseMessage.ofContent(savedCustomer));
     }
 
     @PutMapping("/{id}")
@@ -51,7 +51,7 @@ public class CustomerController {
         final Customer toUpdate = customerService.findBy(id);
         final Customer updatedcustomer = customerService.update(id, toUpdate);
 
-        return ResponseMessage.of(updatedcustomer);
+        return ResponseMessage.ofContent(updatedcustomer);
     }
 
 }

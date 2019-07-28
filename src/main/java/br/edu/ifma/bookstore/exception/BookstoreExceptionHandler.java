@@ -34,7 +34,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         final String message = messageSource.getMessage("parameter.invalid", null, new Locale("pt", "BR"));
 
-        final ResponseMessage<Object> response = ResponseMessage.of(new ErrorMessage(message, exeption.getLocalizedMessage()));
+        final ResponseMessage<Object> response = ResponseMessage.ofErrors(new ErrorMessage(message, exeption.getLocalizedMessage()));
 
         return super.handleExceptionInternal(exeption, response, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -50,7 +50,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
                 .map((fieldError) -> new ErrorMessage(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        final ResponseMessage<Object> response = ResponseMessage.of(errors.toArray());
+        final ResponseMessage<Object> response = ResponseMessage.ofErrors(errors.toArray(new ErrorMessage[errors.size()]));
 
         return super.handleExceptionInternal(exception, response, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -60,7 +60,7 @@ public class BookstoreExceptionHandler  extends ResponseEntityExceptionHandler {
         final String message = String.format("Recurso não encontrado. Expectativa: %d, Encontrado: %d",
                                           exception.getExpectedSize(), exception.getActualSize());
 
-        return ResponseMessage.of(new ErrorMessage(message, exception.getMostSpecificCause().toString()));
+        return ResponseMessage.ofErrors(new ErrorMessage(message, exception.getMostSpecificCause().toString()));
     }
 
 }
