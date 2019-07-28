@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.edu.ifma.bookstore.model.Book;
 import br.edu.ifma.bookstore.model.Tag;
 import br.edu.ifma.bookstore.utils.ObjectAtributes;
+import lombok.Data;
 
+@Data
 public final class BookDto {
 
     private Long id;
@@ -46,9 +47,6 @@ public final class BookDto {
     @Positive
     private BigDecimal price;
 
-    private BookDto() {
-    }
-
     public static BookDto createFrom(Book book) {
         BookDto dto = new BookDto();
         BeanUtils.copyProperties(book, dto);
@@ -65,78 +63,6 @@ public final class BookDto {
         Book book = new Book();
         BeanUtils.copyProperties(this, book, "id");
         return book;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getPublishingCompany() {
-        return publishingCompany;
-    }
-
-    public void setPublishingCompany(String publishingCompany) {
-        this.publishingCompany = publishingCompany;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(Integer releaseYear) {
-        this.releaseYear = releaseYear;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-    
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
 }

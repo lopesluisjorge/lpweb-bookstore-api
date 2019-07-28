@@ -14,6 +14,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "tag")
 public class Tag {
@@ -30,30 +33,6 @@ public class Tag {
     @JsonIgnore
     @ManyToMany(mappedBy = "tags")
     private final List<Book> books = new ArrayList<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
 
     public void add(Book... books) {
         this.books.addAll(Arrays.asList(books));

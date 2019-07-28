@@ -1,5 +1,6 @@
 package br.edu.ifma.bookstore.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -11,9 +12,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "item_rental")
-public class ItemRental {
+public class ItemRental implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     private ItemRentalPk id;
@@ -29,10 +35,6 @@ public class ItemRental {
 
     private LocalDate returnDate;
 
-    @Deprecated
-    public ItemRental() {
-    }
-
     public ItemRental(ItemRentalPk itemRentalPk) {
         this.id = itemRentalPk;
         final BigDecimal itemPrice = id.getItem().getPrice();
@@ -43,30 +45,6 @@ public class ItemRental {
     public void beforePersist() {
         final BigDecimal itemPrice = id.getItem().getPrice();
         this.rentalPrice = itemPrice.subtract(itemPrice.multiply(this.discount));
-    }
-
-    public ItemRentalPk getId() {
-        return id;
-    }
-
-    public BigDecimal getPrice() {
-        return rentalPrice;
-    }
-
-    public LocalDate getRentalDate() {
-        return rentalDate;
-    }
-    
-    public void setRentalDate(LocalDate rentalDate) {
-        this.rentalDate = rentalDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
     }
 
 }

@@ -32,6 +32,9 @@ import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "book")
 @SQLDelete(sql = "UPDATE book SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?", check = ResultCheckStyle.COUNT)
@@ -99,72 +102,8 @@ public class Book {
         updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getPublishingCompany() {
-        return publishingCompany;
-    }
-
-    public void setPublishingCompany(String publishingCompany) {
-        this.publishingCompany = publishingCompany;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(Integer year) {
-        this.releaseYear = year;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
     public void add(Tag... tags) {
         this.tags.addAll(Arrays.asList(tags));
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public Integer addToStock(int quantity) {
@@ -173,18 +112,6 @@ public class Book {
 
     public void removeFromStock() {
         stock--;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
     }
 
     @Override

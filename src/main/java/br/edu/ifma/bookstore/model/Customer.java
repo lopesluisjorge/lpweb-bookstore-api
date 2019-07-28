@@ -2,6 +2,8 @@ package br.edu.ifma.bookstore.model;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -28,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+@Data
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -71,68 +74,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private final Set<Rental> rentals = new LinkedHashSet<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String fullName) {
-        this.name = fullName;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public Set<String> getPhones() {
-        return phones;
-    }
-
     public void addPhone(String phone) {
         this.phones.add(phone);
-    }
-    
-    public Set<Rental> getRentals() {
-        return rentals;
     }
     
     public void add(Rental... rentals) {

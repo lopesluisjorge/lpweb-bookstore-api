@@ -20,6 +20,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "rental")
 public class Rental {
@@ -56,14 +59,6 @@ public class Rental {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public BigDecimal getSubtotal() {
         if (subtotal == null) {
             return calculeSubtotal();
@@ -71,41 +66,13 @@ public class Rental {
         return subtotal;
     }
 
-    public LocalDate getRentalDate() {
-        return rentalDate;
-    }
-
-    public void setRentalDate(LocalDate rentalDate) {
-        this.rentalDate = rentalDate;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Set<ItemRental> getItemsRental() {
-        return itemsRental;
-    }
-
     public void add(ItemRental... itemsRental) {
         this.itemsRental.addAll(Arrays.asList(itemsRental));
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
     private BigDecimal calculeSubtotal() {
         return itemsRental.stream()
-                .map(itemRental -> itemRental.getPrice())
+                .map(itemRental -> itemRental.getRentalPrice())
                 .reduce(BigDecimal.ZERO, (sum, price) -> sum.add(price));
     }
 

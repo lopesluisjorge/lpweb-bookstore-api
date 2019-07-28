@@ -1,5 +1,6 @@
 package br.edu.ifma.bookstore.model;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -18,6 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "item")
 public class Item {
@@ -40,46 +46,16 @@ public class Item {
     @OneToMany(mappedBy = "id.item")
     private Set<ItemRental> itemRentals = new LinkedHashSet<>();
 
-    @Deprecated
-    public Item() {
-    }
-
     public static Item of(Book book) {
         final Item item = new Item();
         item.book = book;
         return item;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+    
+    @JsonIgnore
+    @Transient
     public BigDecimal getPrice() {
         return book.getPrice();
-    }
-
-    public ItemStatus getStatus() {
-        return status;
-    }
-    
-    public void setStatus(ItemStatus status) {
-        this.status = status;
-    }
-
-    public Set<ItemRental> getItemRentals() {
-        return itemRentals;
     }
 
     public void add(ItemRental... itemRentals) {

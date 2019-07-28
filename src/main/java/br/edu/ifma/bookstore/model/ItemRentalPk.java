@@ -6,6 +6,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Data;
+
+@Data
 @Embeddable
 public class ItemRentalPk implements Serializable {
 
@@ -13,27 +16,15 @@ public class ItemRentalPk implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private Item item;
+    private final Item item;
 
     @ManyToOne
     @JoinColumn(name = "rental_id")
-    private Rental rental;
-
-    @Deprecated
-    public ItemRentalPk() {
-    }
+    private final Rental rental;
 
     public ItemRentalPk(Item item, Rental rental) {
         this.item = item;
         this.rental = rental;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public Rental getRental() {
-        return rental;
     }
 
     @Override

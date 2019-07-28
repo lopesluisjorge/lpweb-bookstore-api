@@ -4,13 +4,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Data;
+
+@Data
 public class ResponseMessage<T> {
 
     private T content;
     private final Set<ErrorMessage> errors = new HashSet<>();
-
-    private ResponseMessage() {
-    }
 
     public static <T> ResponseMessage<T> of(T t) {
         final ResponseMessage<T> responseMessage = new ResponseMessage<>();
@@ -26,14 +26,6 @@ public class ResponseMessage<T> {
 
     public T getContent() {
         return content;
-    }
-
-    public void setContent(T content) {
-        this.content = content;
-    }
-
-    public Set<ErrorMessage> getErrors() {
-        return errors;
     }
 
     public void add(ErrorMessage... errors) {
