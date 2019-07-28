@@ -6,6 +6,12 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
+import br.edu.ifma.bookstore.book.Book;
+import br.edu.ifma.bookstore.rental.Item;
+import br.edu.ifma.bookstore.rental.ItemRental;
+import br.edu.ifma.bookstore.rental.ItemRentalPk;
+import br.edu.ifma.bookstore.rental.Rental;
+
 public class RentalTest {
 
     @Test
